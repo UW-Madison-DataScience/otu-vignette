@@ -185,7 +185,19 @@ summary {
 </div>
 
 
-<p>The <code>tidyverse</code> R package loads several packages, including <code>ggplot2</code>, which we will use to create our reproducible visualization; <code>tidyverse</code> will also load in <code>dplyr</code> which we will use to manipulate the data and ultimately add text to our visualization.</p>
+<pre class="r"><code>knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(ggplot2)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<p>We start by loading several packages, including <code>ggplot2</code>, which we will use to create our reproducible visualization; and also <code>dplyr</code> ,which we will use to manipulate the data and ultimately add text to our visualization.</p>
 <p>First, we want to read in the data. We use <code>read.csv()</code> to read in <code>viz_cleansamples1.csv</code> from our <em>data/</em> folder. We use the <code>str()</code> function to explore the structure of the dataset.</p>
 <pre class="r"><code>#read in data
 samples &lt;- read.csv(&quot;../data/viz_cleansamples1.csv&quot;)

@@ -5,13 +5,15 @@ date: "January 22, 2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+
 ```
 
-The `tidyverse` R package loads several packages, including `ggplot2`, which we will use to create our reproducible visualization; `tidyverse` will also load in `dplyr` which we will use to manipulate the data and ultimately add text to our visualization.
+We start by loading several packages, including `ggplot2`, which we will use to create our reproducible visualization; and also `dplyr` ,which we will use to manipulate the data and ultimately add text to our visualization.
 
 
 First, we want to read in the data. We use `read.csv()` to read in `viz_cleansamples1.csv` from our *data/* folder. We use the `str()` function to explore the structure of the dataset.
