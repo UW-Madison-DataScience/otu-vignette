@@ -3,7 +3,8 @@
 #M.Kamenetsky
 #2020-01-08
 #################################################
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 
 full <- read.delim("data/abundance_table.txt", header=TRUE)
 reduced <- full %>%
