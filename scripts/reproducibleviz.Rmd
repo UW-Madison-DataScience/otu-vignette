@@ -1,0 +1,145 @@
+---
+title: "Reproducible Visualization Using R"
+author: "Maria Kamenetsky"
+date: "January 22, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+```
+
+The `tidyverse` R package loads several packages, including `ggplot2`, which we will use to create our reproducible visualization; `tidyverse` will also load in `dplyr` which we will use to manipulate the data and ultimately add text to our visualization.
+
+
+First, we want to read in the data. We use `read.csv()` to read in `viz_cleansamples1.csv` from our *data/* folder. We use the `str()` function to explore the structure of the dataset.
+
+```{r}
+#read in data
+samples <- read.csv("../data/viz_cleansamples1.csv")
+#check out data structure
+str(samples)
+
+```
+
+## Explore the Data
+
+Next, we want to explore the dataset. We use the `tapply()` function to calculate the summary statistics by body site.
+
+```{r}
+tapply(samples$otus, samples$bodysite, summary)
+tapply(samples$otus, samples$bodysite, sum)
+tapply(samples$otus, samples$sampleid, sum)
+```
+
+I want to directly add the sum total of otus by sample/body site to the plot. To do so, we first need to process the **samples** dataframe. Recall, we know the sum total of otus by sample from `tapply(samples$otus, samples$bodysite, sum)`. We will add a new variable called `sumtot` which will be the sum total by sample id. We will use the `dplyr` R package to calculate the sum total by sample id and add `sumtot` to the dataframe:
+
+```{r}
+samples <- samples %>%
+    group_by(sampleid) %>%
+    mutate(sumtot = sum(otus, na.rm=TRUE))
+head(samples)
+```
+
+
+
+## Create Visualization
+
+```{r}
+#create base bar plot we will add to
+ggplot(data=samples, aes(x=bodysite, y=otus)) +
+    geom_bar(stat="identity")
+
+#save this base plot as p1, we will add things to p1 (this will save a bit of typing)
+p1 <- ggplot(data=samples, aes(x=bodysite, y=otus, fill=bodysite)) +
+    geom_bar(stat="identity")
+#what does p1 look like? Call the object p1
+p1
+
+#add black and white background them & change colors to goldenrod, purple, forestgreen
+p1 + theme_bw() +
+    scale_fill_manual(values = c("goldenrod", "purple", "forestgreen"))
+
+#change x, y labels and add informative title to plot
+p1 + theme_bw() +
+    scale_fill_manual(values = c("goldenrod", "purple", "forestgreen")) +
+    ylab("OTU Count") + 
+    xlab("Body site") +
+    ggtitle("Bar Plot of OTU Count by Body Site")
+
+#center plot title and change legend title
+p1 + theme_bw() +
+    scale_fill_manual(values = c("goldenrod", "purple", "forestgreen")) +
+    ylab("OTU Count") + 
+    xlab("Body site") +
+    ggtitle("Bar Plot of OTU Count by Body Site") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    labs(fill = "Body Site")
+
+#Change legend labels to be capitalized, separate "leftpalm" into 2 words
+p1 + theme_bw() +
+    scale_fill_manual(name = "Body Site",
+                        labels = c("Gut", "Left Palm", "Tongue"),
+                      values = c("goldenrod", "purple", "forestgreen")) +
+    ylab("OTU Count") + 
+    xlab("Body site") +
+    ggtitle("Bar Plot of OTU Count by Body Site") +
+    theme(plot.title = element_text(hjust = 0.5))
+
+#facet by sampleid (create a multi-panel plot)
+p1 + theme_bw() +
+    scale_fill_manual(name = "Body Site",
+                        labels = c("Gut", "Left Palm", "Tongue"),
+                      values = c("goldenrod", "purple", "forestgreen")) +
+    ylab("OTU Count") + 
+    xlab("Body site") +
+    ggtitle("Bar Plot of OTU Count by Body Site") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    facet_wrap(.~sampleid)
+
+
+#add text to each panel
+p1 + theme_bw() + 
+    scale_fill_manual(name = "Body Site",
+                        labels = c("Gut", "Left Palm", "Tongue"),
+                      values = c("goldenrod", "purple", "forestgreen")) +
+    ylab("OTU Count") + 
+    xlab("Body site") +
+    ggtitle("Bar Plot of OTU Count by Body Site") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_text(aes(label=sumtot), y=6000) +
+    facet_wrap(.~sampleid) 
+
+#save my visualization
+ggsave("myviz.png", path = "../figures/")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
