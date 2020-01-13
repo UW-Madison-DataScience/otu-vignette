@@ -22,7 +22,7 @@ reduced_long <- reduced %>%
 clean1 <- reduced_long %>%
     dplyr::filter(otus!=0) %>%
     dplyr::select(sampleid, otus, bodysite)
-write.csv(clean1, file="data/viz_cleansamples1.csv")
+write.csv(clean1, file="data/viz_cleansamples1.csv", row.names = FALSE)
 
 
 #samples 2 (second viz)
@@ -38,4 +38,4 @@ reduced_long <- reduced %>%
 clean2 <- reduced_long %>%
     dplyr::filter(otus!=0) %>%
     dplyr::select(sampleid, otus, bodysite)
-write.csv(clean2, file="data/viz_cleansamples2.csv")
+write.csv(clean2, file="data/viz_cleansamples2.csv", row.names = FALSE)
